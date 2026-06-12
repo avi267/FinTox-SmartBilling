@@ -1,0 +1,87 @@
+policy_id: LLS-PFAP-2024
+file_name: leukemia_lymphoma_society.yaml
+program_name: LLS Patient Financial Aid Program
+program_type: foundation_grant
+
+eligible_billing_codes: []
+eligible_diagnoses:
+  - leukemia
+  - lymphoma
+  - myeloma
+  - myelodysplastic
+  - myeloproliferative
+  - waldenstrom
+  - cll
+  - all
+  - aml
+  - cml
+  - nhl
+  - hl
+  - mds
+  - mpn
+  - dlbcl
+  - mcl
+  - fl
+
+required_biomarkers: []
+
+requires_commercial_insurance: false
+requires_insurance: true
+
+covers_facility_fees: false
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 12000.00
+covers_deductible: true
+
+income_limit_fpl_pct: null
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The Leukemia & Lymphoma Society (LLS) Patient Financial Aid Program provides up to $12,000
+  per year toward drug-related out-of-pocket costs for patients with blood cancers. LLS is
+  specifically focused on hematologic malignancies — leukemia, lymphoma, myeloma, MDS, and
+  related conditions — and does not cover solid tumors.
+
+  ELIGIBLE DIAGNOSES: Chronic Lymphocytic Leukemia (CLL), Acute Lymphoblastic Leukemia (ALL),
+  Acute Myeloid Leukemia (AML), Chronic Myeloid Leukemia (CML), Hodgkin Lymphoma (HL),
+  Non-Hodgkin Lymphoma (NHL), Diffuse Large B-Cell Lymphoma (DLBCL), Mantle Cell Lymphoma (MCL),
+  Follicular Lymphoma (FL), Multiple Myeloma, Myelodysplastic Syndrome (MDS), Myeloproliferative
+  Neoplasms (MPN), and Waldenstrom Macroglobulinemia. Diagnoses not on this list (e.g., solid
+  tumors, breast cancer) are not covered — refer these patients to PAN Foundation or CancerCare.
+
+  NO INCOME LIMIT: The LLS program uses a needs-based financial assessment rather than a hard
+  income cutoff. Patients at various income levels may qualify depending on treatment costs and
+  financial reserve. Higher-income patients with very high drug costs may still receive assistance.
+
+  ACCEPTS GOVERNMENT PLANS: Medicare, Medicaid, TRICARE, and other government insurance patients
+  are eligible. The program requires active insurance (the patient must have some coverage).
+
+  WHAT IS COVERED — DRUG COSTS ONLY: This grant covers drug out-of-pocket costs (deductible
+  and coinsurance on drug claims). Facility fees, infusion nursing fees, and administrative
+  charges are not covered. For facility fee assistance, refer the patient to a broader
+  foundation like HealthWell or Patient Advocate Foundation.
+
+  ENROLLMENT: Apply at www.lls.org/financial-support or call 1-800-955-4572. A financial
+  counselor conducts a needs assessment during the application — have the patient prepare
+  information about monthly treatment costs, income, and existing financial obligations.
+  Applications are reviewed within 5 business days.
+
+  REQUIRED DOCUMENTATION: Active insurance card (commercial or government), oncologist
+  confirmation of blood cancer diagnosis and active treatment, income documentation (tax
+  return or benefit letter), and monthly out-of-pocket cost estimate.
+
+  ANNUAL BENEFIT USE: The $12,000 grant covers drug OOP across all eligible blood cancer
+  drug claims. A patient with CLL on Venetoclax ($800/month drug OOP) could receive
+  approximately 15 months of coverage — the grant may carry over into the next year if
+  not fully used by December 31 (confirm with LLS counselor).
+
+  FUND AVAILABILITY: LLS maintains dedicated disease-specific grant funds. Funding can vary
+  by disease type — CLL funds may be open while AML funds are closed, or vice versa.
+  Patients should check the LLS portal for current availability by disease category.
+
+  STACKING: If a manufacturer copay card covers part of the drug cost (e.g., covers $500 of
+  an $800 out-of-pocket), LLS can cover the remaining $300 balance, maximizing patient benefit.
+
+  CONTACT: LLS Information Resource Center 1-800-955-4572 | www.lls.org/financial-support

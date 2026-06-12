@@ -1,0 +1,73 @@
+policy_id: PAN-BC-2024
+file_name: pan_foundation_breast.yaml
+program_name: PAN Foundation Breast Cancer Grant
+program_type: foundation_grant
+
+eligible_billing_codes: []
+eligible_diagnoses: [breast]
+required_biomarkers: []
+
+requires_commercial_insurance: false
+requires_insurance: true
+
+covers_facility_fees: true
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 10000.00
+covers_deductible: true
+
+income_limit_fpl_pct: 400.0
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The PAN Foundation Breast Cancer Grant provides financial assistance to breast cancer
+  patients who have active insurance but face unaffordable out-of-pocket costs. The grant
+  covers up to $10,000 per year toward any breast cancer treatment claim — including drug
+  infusions, facility fees, and administrative charges — making it one of the few programs
+  that covers facility costs in addition to drug costs.
+
+  INCOME ELIGIBILITY: Household income must be at or below 400% of the Federal Poverty Level
+  (FPL), adjusted for family size. For a single-person household in 2024 this is approximately
+  $60,240; for a family of three it is approximately $103,280. Patients must submit proof of
+  income (most recent tax return or equivalent documentation).
+
+  DIAGNOSIS REQUIREMENT: The patient's diagnosis must include breast cancer. Any stage or
+  subtype qualifies — HER2+, triple-negative, ER/PR+, lobular, ductal carcinoma in situ
+  (DCIS) requiring treatment, and male breast cancer. Metastatic disease qualifies.
+
+  ACCEPTS GOVERNMENT PLANS: Unlike manufacturer copay cards, this grant accepts patients
+  with Medicare, Medicaid, TRICARE, or other government insurance. All patients must have
+  some form of active insurance — fully uninsured patients are not eligible.
+
+  ENROLLMENT: Apply online at www.panfoundation.org or call 1-866-316-7263. Applications
+  are reviewed within 3–5 business days. The program operates on a first-come, first-served
+  basis subject to fund availability — early enrollment in the benefit year is recommended.
+
+  REQUIRED DOCUMENTATION: Proof of insurance coverage, most recent federal tax return (or
+  alternative income documentation), oncologist letter confirming breast cancer diagnosis and
+  active treatment, and completed PAN application.
+
+  FUND AVAILABILITY: The PAN Foundation operates grant programs that open and close based on
+  available funding. When funds are exhausted, the program closes until the next funding cycle.
+  Patients should check www.panfoundation.org for current open/closed status before applying.
+
+  COVERS FACILITY FEES: This grant uniquely covers facility and administrative fees in
+  addition to drug costs. For a patient with a $1,500 facility fee, the grant covers both
+  the drug cost and facility cost, unlike manufacturer copay cards which exclude facility charges.
+
+  ANNUAL GRANT AMOUNT: The $10,000 annual grant applies to all covered breast cancer claims
+  combined. Once $10,000 in assistance is disbursed, the patient is responsible for remaining
+  costs for the year. The grant year runs January 1 through December 31.
+
+  CLAIM SEQUENCING AND COORDINATION: The PAN Foundation coordinates with the patient's primary
+  insurance. Claims are submitted to insurance first; PAN covers the remaining patient balance
+  (deductible + coinsurance) up to the grant maximum. No special claim sequencing is required
+  — the foundation applies after insurance adjudicates.
+
+  STACKING WITH OTHER PROGRAMS: If a patient also qualifies for a manufacturer copay card
+  (e.g., for a specific drug code), the manufacturer card should be applied first. PAN can
+  cover remaining balances that the manufacturer card does not cover (e.g., facility fees).
+  Coordination with the patient advocate is recommended to maximize benefit stacking.
+
+  CONTACT: PAN Foundation 1-866-316-7263 | www.panfoundation.org (Mon–Fri 9am–5pm ET)

@@ -1,0 +1,214 @@
+{
+  "patients": [
+    {
+      "id": "PT-001",
+      "name": "Maria",
+      "diagnosis": "Stage II HER2+ Breast Cancer",
+      "annual_household_income": 42000.00,
+      "family_size": 3,
+      "insurance_type": "commercial",
+      "biomarkers": ["HER2+", "ER-", "PR-"],
+      "treatment_status": "active",
+      "insurance": {
+        "remaining_deductible": 500.00,
+        "coinsurance_rate": 0.20
+      },
+      "claims": [
+        {
+          "type": "drug",
+          "description": "Trastuzumab (Herceptin) Injection",
+          "billing_code": "J9331",
+          "retail_cost": 2500.00,
+          "assistance_program": null
+        },
+        {
+          "type": "facility_fee",
+          "description": "Clinic Administrative & Labor Fee",
+          "billing_code": "ADMIN-FEE",
+          "retail_cost": 1500.00,
+          "assistance_program": null
+        }
+      ]
+    },
+    {
+      "id": "PT-002",
+      "name": "James",
+      "diagnosis": "Stage III Non-Small Cell Lung Cancer (NSCLC)",
+      "annual_household_income": 80000.00,
+      "family_size": 1,
+      "insurance_type": "commercial",
+      "biomarkers": ["EGFR-", "ALK-", "PD-L1+"],
+      "treatment_status": "active",
+      "insurance": {
+        "remaining_deductible": 1200.00,
+        "coinsurance_rate": 0.30
+      },
+      "claims": [
+        {
+          "type": "drug",
+          "description": "Pembrolizumab (Keytruda) Injection",
+          "billing_code": "J9271",
+          "retail_cost": 9000.00,
+          "assistance_program": null
+        },
+        {
+          "type": "facility_fee",
+          "description": "Clinic Administrative & Labor Fee",
+          "billing_code": "ADMIN-FEE",
+          "retail_cost": 2000.00,
+          "assistance_program": null
+        }
+      ]
+    },
+    {
+      "id": "PT-003",
+      "name": "Linda",
+      "diagnosis": "BRCA1+ Ovarian Cancer (Platinum-Sensitive Relapsed)",
+      "annual_household_income": 55000.00,
+      "family_size": 2,
+      "insurance_type": "commercial",
+      "biomarkers": ["BRCA1"],
+      "treatment_status": "active",
+      "insurance": {
+        "remaining_deductible": 600.00,
+        "coinsurance_rate": 0.20
+      },
+      "claims": [
+        {
+          "type": "drug",
+          "description": "Olaparib (Lynparza) Tablets",
+          "billing_code": "J8999-OLA",
+          "retail_cost": 3500.00,
+          "assistance_program": null
+        },
+        {
+          "type": "facility_fee",
+          "description": "Clinic Administrative & Lab Fee",
+          "billing_code": "ADMIN-FEE",
+          "retail_cost": 1200.00,
+          "assistance_program": null
+        }
+      ]
+    },
+    {
+      "id": "PT-004",
+      "name": "Robert",
+      "diagnosis": "HER2+ Metastatic Breast Cancer",
+      "annual_household_income": 95000.00,
+      "family_size": 1,
+      "insurance_type": "commercial",
+      "biomarkers": ["HER2+", "ER+", "PR-"],
+      "treatment_status": "active",
+      "insurance": {
+        "remaining_deductible": 1500.00,
+        "coinsurance_rate": 0.30
+      },
+      "claims": [
+        {
+          "type": "drug",
+          "description": "Pertuzumab (Perjeta) Injection",
+          "billing_code": "J9306",
+          "retail_cost": 4200.00,
+          "assistance_program": null
+        },
+        {
+          "type": "facility_fee",
+          "description": "Clinic Administrative & Labor Fee",
+          "billing_code": "ADMIN-FEE",
+          "retail_cost": 800.00,
+          "assistance_program": null
+        }
+      ]
+    },
+    {
+      "id": "PT-005",
+      "name": "Marcus",
+      "diagnosis": "Chronic Lymphocytic Leukemia (CLL) — Relapsed/Refractory",
+      "annual_household_income": 38000.00,
+      "family_size": 3,
+      "insurance_type": "commercial",
+      "biomarkers": ["del17p"],
+      "treatment_status": "active",
+      "insurance": {
+        "remaining_deductible": 800.00,
+        "coinsurance_rate": 0.20
+      },
+      "claims": [
+        {
+          "type": "drug",
+          "description": "Venetoclax (Venclexta) Tablets",
+          "billing_code": "J8999-VEN",
+          "retail_cost": 6500.00,
+          "assistance_program": null
+        },
+        {
+          "type": "facility_fee",
+          "description": "Clinic Administrative & Lab Fee",
+          "billing_code": "ADMIN-FEE",
+          "retail_cost": 900.00,
+          "assistance_program": null
+        }
+      ]
+    },
+    {
+      "id": "PT-006",
+      "name": "Dorothy",
+      "diagnosis": "Stage II Colorectal Adenocarcinoma",
+      "annual_household_income": 28000.00,
+      "family_size": 1,
+      "insurance_type": "medicare",
+      "biomarkers": ["MSS", "RAS-WT"],
+      "treatment_status": "active",
+      "insurance": {
+        "remaining_deductible": 400.00,
+        "coinsurance_rate": 0.20
+      },
+      "claims": [
+        {
+          "type": "drug",
+          "description": "Bevacizumab (Avastin) Injection",
+          "billing_code": "J9035",
+          "retail_cost": 5200.00,
+          "assistance_program": null
+        },
+        {
+          "type": "facility_fee",
+          "description": "Clinic Administrative & Labor Fee",
+          "billing_code": "ADMIN-FEE",
+          "retail_cost": 800.00,
+          "assistance_program": null
+        }
+      ]
+    },
+    {
+      "id": "PT-007",
+      "name": "Elena",
+      "diagnosis": "Stage I Triple-Negative Breast Cancer (TNBC)",
+      "annual_household_income": 120000.00,
+      "family_size": 2,
+      "insurance_type": "commercial",
+      "biomarkers": ["ER-", "PR-", "HER2-"],
+      "treatment_status": "active",
+      "insurance": {
+        "remaining_deductible": 300.00,
+        "coinsurance_rate": 0.25
+      },
+      "claims": [
+        {
+          "type": "drug",
+          "description": "Ribociclib (Kisqali) Tablets",
+          "billing_code": "J8999",
+          "retail_cost": 1800.00,
+          "assistance_program": null
+        },
+        {
+          "type": "facility_fee",
+          "description": "Clinic Administrative & Lab Fee",
+          "billing_code": "ADMIN-FEE",
+          "retail_cost": 600.00,
+          "assistance_program": null
+        }
+      ]
+    }
+  ]
+}

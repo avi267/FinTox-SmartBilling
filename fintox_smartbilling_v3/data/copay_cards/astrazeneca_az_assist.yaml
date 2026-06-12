@@ -1,0 +1,74 @@
+policy_id: AZ-ASSIST-2024
+file_name: astrazeneca_az_assist.yaml
+program_name: AstraZeneca AZ&Me Assist Oncology Card
+program_type: manufacturer_card
+
+eligible_billing_codes: [J8999-OLA]
+eligible_diagnoses:
+  - breast
+  - ovarian
+  - ovary
+  - prostate
+  - pancreatic
+  - fallopian
+  - peritoneal
+  - cancer
+  - carcinoma
+required_biomarkers: [BRCA]
+
+requires_commercial_insurance: true
+requires_insurance: true
+
+covers_facility_fees: false
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 30000.00
+covers_deductible: true
+
+income_limit_fpl_pct: null
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The AstraZeneca AZ&Me Assist Oncology Card covers 100% of patient out-of-pocket costs
+  for Olaparib (Lynparza) billed under code J8999-OLA, including deductible and coinsurance,
+  up to $30,000 per calendar year. This is one of the higher annual maximums available among
+  manufacturer copay programs for PARP inhibitors.
+
+  BIOMARKER REQUIREMENT — MANDATORY: This card is restricted to patients with a documented
+  BRCA1 or BRCA2 mutation. Germline or somatic BRCA testing results must be in the patient's
+  medical record. The oncologist attestation at enrollment must confirm BRCA mutation status.
+  Patients with BRCA wild-type tumors are not eligible regardless of diagnosis or billing code.
+
+  ENROLLMENT: Enroll at www.azandmepatientsupport.com or call 1-844-275-2360.
+  Biomarker documentation must be submitted at enrollment or within 30 days.
+
+  REQUIRED DOCUMENTATION: Commercial insurance card, J8999-OLA prescription, oncologist
+  letter confirming BRCA mutation status (germline or somatic), and signed enrollment form.
+
+  CLINICAL CONTEXT: Olaparib (Lynparza) is approved for BRCA-mutated breast cancer (adjuvant
+  and metastatic), ovarian cancer, pancreatic cancer, and prostate cancer. Enrollment is not
+  restricted by tumor type — any BRCA-mutated cancer eligible for olaparib therapy qualifies.
+
+  CLAIM SEQUENCING: Submit the J8999-OLA drug claim before facility or administrative fees
+  to ensure this card absorbs the full remaining deductible. Drug-first sequencing is critical
+  given the deductible component can be $1,000–$3,000 for patients starting a new benefit year.
+
+  ANNUAL MAX EXHAUSTION: The $30,000 annual benefit is typically sufficient for a full year
+  of Olaparib therapy (400mg twice daily oral). At $2,500/month patient responsibility, the
+  benefit lasts approximately 12 months. Benefits reset on January 1.
+
+  WHAT THIS CARD DOES NOT COVER: Facility fees, pharmacy dispensing fees, laboratory fees,
+  BRCA testing costs, and any billing code other than J8999-OLA.
+
+  MID-YEAR INSURANCE CHANGES: Transition to any government plan (Medicare, Medicaid) terminates
+  eligibility immediately. AstraZeneca has a separate Patient Assistance Program (PAP) providing
+  free drug for patients who lose insurance or become Medicare-eligible.
+
+  BIOSIMILAR / GENERIC NOTE: Olaparib does not yet have biosimilar or generic competition.
+  If generics enter market, their billing codes differ — a new card enrollment would be required.
+
+  GOVERNMENT PLAN PATIENTS: Medicare, Medicaid, TRICARE, CHIP, VA ineligible. Refer to
+  AstraZeneca's free drug PAP for government plan patients meeting income criteria.
+
+  CONTACT: AZ&Me Patient Support 1-844-275-2360 | www.azandmepatientsupport.com

@@ -1,0 +1,62 @@
+policy_id: GEN-ACCESS-2024
+file_name: genentech_access_card.yaml
+program_name: Genentech Oncology Access Card
+program_type: manufacturer_card
+
+eligible_billing_codes: [J9306]
+eligible_diagnoses:
+  - breast
+  - her2
+required_biomarkers: []
+
+requires_commercial_insurance: true
+requires_insurance: true
+
+covers_facility_fees: false
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 20000.00
+covers_deductible: true
+
+income_limit_fpl_pct: null
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The Genentech Oncology Access Card covers 100% of the patient's out-of-pocket
+  responsibility for Pertuzumab (Perjeta) infusions billed under code J9306, including
+  the deductible and coinsurance portions, up to $20,000 per calendar year. No monthly
+  cap applies — the benefit is available across any number of cycles within the year.
+
+  ENROLLMENT: Enroll at www.genentechaccesssolutions.com or call 1-888-249-4918.
+  The clinic billing department receives a card number to apply at adjudication.
+  Enrollment typically completes within 2 business days.
+
+  REQUIRED DOCUMENTATION: Active commercial insurance card, oncologist prescription
+  for J9306, and signed enrollment form. No income verification required.
+
+  CLAIM SEQUENCING: Submit the J9306 Pertuzumab claim before any facility or
+  administrative fees to allow this card to absorb the patient's remaining deductible.
+  If a non-covered claim is submitted first, the deductible is consumed out-of-pocket
+  and cannot be recovered retroactively.
+
+  COVERAGE SCOPE: Covers drug deductible and coinsurance for J9306 only. Facility fees,
+  nursing fees, and any other billing code are excluded. Does not cover Trastuzumab (J9331)
+  or Pertuzumab/Trastuzumab combination products billed under different codes.
+
+  ANNUAL MAX EXHAUSTION: The $20,000 annual limit resets on January 1. Patients on
+  quarterly Pertuzumab maintenance cycles (approximately 8 visits/year at $2,500 drug
+  cost per visit) typically have sufficient annual benefit for the full year. The clinic
+  can verify remaining balance via the support portal.
+
+  MID-YEAR CHANGES: Transition to Medicare or any government plan mid-year terminates
+  eligibility immediately. Foundation grants (HealthWell, PAF) are the appropriate
+  alternative for patients who lose commercial coverage.
+
+  BIOSIMILARS: This card is specific to Pertuzumab (J9306). Biosimilar pertuzumab
+  products, if approved, would require a separate program.
+
+  GOVERNMENT PLAN PATIENTS: Medicare, Medicaid, TRICARE, and all federal/state
+  government insurance programs are ineligible per federal anti-kickback regulations.
+
+  CONTACT: Genentech Access Solutions 1-888-249-4918 | www.genentechaccesssolutions.com

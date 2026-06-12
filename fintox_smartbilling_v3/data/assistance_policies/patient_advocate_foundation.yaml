@@ -1,0 +1,100 @@
+policy_id: PAF-COPAY-2024
+file_name: patient_advocate_foundation.yaml
+program_name: Patient Advocate Foundation Copay Relief
+program_type: foundation_grant
+
+eligible_billing_codes: []
+eligible_diagnoses:
+  - cancer
+  - carcinoma
+  - tumor
+  - malignant
+  - malignancy
+  - oncology
+  - leukemia
+  - lymphoma
+  - myeloma
+  - sarcoma
+  - melanoma
+  - adenocarcinoma
+  - breast
+  - lung
+  - colon
+  - colorectal
+  - ovarian
+  - prostate
+  - pancreatic
+  - gastric
+  - hepatic
+  - renal
+  - bladder
+  - thyroid
+  - cervical
+  - uterine
+  - endometrial
+required_biomarkers: []
+
+requires_commercial_insurance: false
+requires_insurance: true
+
+covers_facility_fees: true
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 5000.00
+covers_deductible: false
+
+income_limit_fpl_pct: null
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The Patient Advocate Foundation (PAF) Copay Relief Program provides up to $5,000 per year
+  toward cancer treatment copayments and coinsurance costs for any cancer diagnosis. This
+  program is unique in two important ways: it has no income limit, and it covers coinsurance
+  and copays only — it does NOT cover the patient's deductible.
+
+  COINSURANCE-ONLY COVERAGE: PAF covers the coinsurance portion of claims (the percentage
+  the patient owes after the deductible is satisfied) and fixed copay amounts. If a patient
+  still has an unsatisfied deductible, PAF will not apply until the deductible is met through
+  other means (either by the patient, or by a manufacturer copay card or other foundation grant).
+  This makes PAF most valuable for patients who have already met their deductible for the year,
+  or whose deductible is covered by a manufacturer card.
+
+  NO INCOME LIMIT: Any insured cancer patient regardless of income may apply. This is
+  particularly valuable for higher-income patients who earn above the 400% FPL threshold
+  that disqualifies them from PAN Foundation and HealthWell Foundation.
+
+  ANY CANCER DIAGNOSIS: Solid tumors and hematologic malignancies all qualify. No diagnosis
+  restriction applies.
+
+  ACCEPTS GOVERNMENT PLANS: Medicare, Medicaid, and TRICARE patients are eligible. Patients
+  must have active insurance — the copay/coinsurance they owe must come from an insurance plan.
+
+  ENROLLMENT: Apply at www.patientadvocate.org or call 1-800-532-5274. Applications are
+  reviewed within 2–3 business days. Have the patient's insurance card, current treatment
+  plan, and billing statements ready.
+
+  REQUIRED DOCUMENTATION: Active insurance card, oncologist letter confirming cancer diagnosis
+  and active treatment, and recent EOB or billing statement showing coinsurance amounts owed.
+  Income documentation is not required.
+
+  STRATEGIC USE CASE — DEDUCTIBLE ALREADY MET: PAF is most effective mid-year, after the
+  patient's deductible has been satisfied. Early in the benefit year when deductibles are high,
+  other programs (manufacturer cards, PAN, HealthWell) are more appropriate because they cover
+  deductible plus coinsurance. PAF's $5,000 is best preserved for coinsurance-only periods.
+
+  STRATEGIC USE CASE — HIGHER-INCOME PATIENTS: Patients earning above $60,000 (single) or
+  $103,000 (family of three) who are ineligible for PAN and HealthWell can use PAF for
+  coinsurance relief with no income barrier.
+
+  STACKING: PAF can be stacked after manufacturer copay cards. If a manufacturer card covers
+  the drug deductible and coinsurance but the patient still owes coinsurance on facility fees,
+  PAF can cover that remaining balance. Coordination of benefits documentation is required.
+
+  ANNUAL BENEFIT: The $5,000 annual benefit resets on January 1. For a patient with $500/month
+  in coinsurance after deductible, the benefit covers approximately 10 months.
+
+  FUND AVAILABILITY: PAF copay relief funds are subject to availability by disease category.
+  Check www.patientadvocate.org for current open disease funds before applying.
+
+  CONTACT: Patient Advocate Foundation 1-800-532-5274 | www.patientadvocate.org

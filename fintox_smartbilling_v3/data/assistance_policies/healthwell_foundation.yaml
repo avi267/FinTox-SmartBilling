@@ -1,0 +1,98 @@
+policy_id: HWF-ONCO-2024
+file_name: healthwell_foundation.yaml
+program_name: HealthWell Foundation Oncology Grant
+program_type: foundation_grant
+
+eligible_billing_codes: []
+eligible_diagnoses:
+  - cancer
+  - carcinoma
+  - tumor
+  - malignant
+  - malignancy
+  - oncology
+  - leukemia
+  - lymphoma
+  - myeloma
+  - sarcoma
+  - melanoma
+  - adenocarcinoma
+  - breast
+  - lung
+  - colon
+  - colorectal
+  - ovarian
+  - prostate
+  - pancreatic
+  - gastric
+  - hepatic
+  - renal
+  - bladder
+  - thyroid
+  - cervical
+  - uterine
+  - endometrial
+required_biomarkers: []
+
+requires_commercial_insurance: false
+requires_insurance: true
+
+covers_facility_fees: true
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 8000.00
+covers_deductible: true
+
+income_limit_fpl_pct: 400.0
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The HealthWell Foundation Oncology Grant provides up to $8,000 per year toward cancer
+  treatment out-of-pocket costs for insured patients who cannot afford their cost-sharing
+  obligations. The grant covers any cancer diagnosis — solid tumors and hematologic
+  malignancies — and any claim type including drug infusions, facility fees, and admin charges.
+
+  INCOME ELIGIBILITY: Household income must be at or below 400% of the Federal Poverty Level
+  (FPL), adjusted for family size. In 2024, this is approximately $60,240 for a single person,
+  $81,760 for a household of two, $103,280 for a household of three, and $124,800 for a
+  household of four. Patients with higher incomes are not eligible and should be referred to
+  other programs (Patient Advocate Foundation, CancerCare) that have no income ceiling.
+
+  DIAGNOSES COVERED: Any active cancer diagnosis qualifies. This includes breast, lung, colon,
+  ovarian, prostate, pancreatic, melanoma, leukemia, lymphoma, myeloma, and all other malignancies.
+  The patient must be actively receiving cancer treatment — surveillance, remission monitoring,
+  or completed treatment phases do not qualify.
+
+  ACCEPTS GOVERNMENT PLANS: Medicare, Medicaid, TRICARE, and other government insurance
+  patients are eligible. The patient must have some form of active insurance coverage —
+  completely uninsured patients are not eligible for this grant.
+
+  ENROLLMENT: Apply at www.healthwellfoundation.org or call 1-800-675-8416. Grant decisions
+  are typically made within 2 business days. The program is subject to fund availability;
+  the website displays current open/closed status by disease category.
+
+  REQUIRED DOCUMENTATION: Active insurance card, proof of income (tax return, pay stubs, or
+  SSA benefit letter), oncologist confirmation of cancer diagnosis and active treatment, and
+  completed HealthWell application.
+
+  ANNUAL GRANT USE: The $8,000 grant is pooled across all covered cancer claims for the year.
+  For example, a patient with a $500 drug copay and $300 facility fee per visit could sustain
+  approximately 10 treatment visits before the grant exhausts. Remaining visits after exhaustion
+  are the patient's full responsibility.
+
+  FUND AVAILABILITY AND TIMING: HealthWell Foundation funding cycles open periodically
+  throughout the year. Some disease-specific funds may close mid-year when exhausted and
+  reopen when new funding is secured. Patients are strongly encouraged to apply at the start
+  of the benefit year (January–February) to secure a grant before funds close.
+
+  COORDINATION WITH MANUFACTURER CARDS: If the patient's drug claim is covered by a
+  manufacturer copay card, the manufacturer card covers the drug OOP first. HealthWell can
+  then cover remaining facility fees and other uncovered balances, maximizing total benefit.
+  HealthWell should be applied after all other available coverage is exhausted.
+
+  MID-YEAR INCOME CHANGE: If household income increases above the 400% FPL ceiling mid-year
+  (e.g., a spouse returns to work), the patient should notify HealthWell. The grant may be
+  paused pending re-evaluation. Undisclosed income changes may result in repayment requests.
+
+  CONTACT: HealthWell Foundation 1-800-675-8416 | www.healthwellfoundation.org

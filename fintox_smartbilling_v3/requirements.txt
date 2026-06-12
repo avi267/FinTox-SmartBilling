@@ -1,0 +1,8 @@
+streamlit==1.58.0
+langchain==0.3.25
+langchain-community==0.3.24
+langchain-google-genai==2.1.4
+pydantic==2.13.4
+bm25s==0.2.12              # replaces abandoned rank_bm25; actively maintained, Python 3.14 compatible
+python-dotenv==1.2.2
+pyyaml==6.0.2

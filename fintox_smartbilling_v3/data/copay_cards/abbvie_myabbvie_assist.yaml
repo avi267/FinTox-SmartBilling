@@ -1,0 +1,71 @@
+policy_id: ABBVIE-MYA-2024
+file_name: abbvie_myabbvie_assist.yaml
+program_name: myAbbVie Assist Oncology Copay Card
+program_type: manufacturer_card
+
+eligible_billing_codes: [J8999-VEN]
+eligible_diagnoses:
+  - chronic lymphocytic leukemia
+  - cll
+  - acute myeloid leukemia
+  - aml
+
+required_biomarkers: []
+
+requires_commercial_insurance: true
+requires_insurance: true
+
+covers_facility_fees: false
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 15000.00
+covers_deductible: true
+
+income_limit_fpl_pct: null
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The myAbbVie Assist Oncology Copay Card covers 100% of patient out-of-pocket costs for
+  Venetoclax (Venclexta) billed under code J8999-VEN, including deductible and coinsurance,
+  up to $15,000 per calendar year. This card is restricted to patients with Chronic Lymphocytic
+  Leukemia (CLL) or Acute Myeloid Leukemia (AML) — the only FDA-approved indications for
+  Venetoclax.
+
+  DIAGNOSIS RESTRICTION: The patient's documented diagnosis must be CLL or AML. Venetoclax
+  is not approved for other hematologic malignancies (e.g., follicular lymphoma, multiple
+  myeloma) as of 2024. Off-label use does not qualify for this copay card.
+
+  ENROLLMENT: Enroll at www.myabbvieassist.com or call 1-800-222-6885.
+  Enrollment is calendar-year based and must be renewed annually by January 31.
+
+  REQUIRED DOCUMENTATION: Commercial insurance card, J8999-VEN prescription confirming CLL
+  or AML indication, oncologist attestation of diagnosis, and signed enrollment form.
+
+  RAMP-UP DOSING NOTE: Venetoclax uses a 5-week ramp-up schedule (starting at 20mg, escalating
+  to 400mg) to reduce tumor lysis syndrome risk. During ramp-up, the daily dose — and
+  therefore drug cost per claim — increases weekly. The copay card applies at each claim
+  submission regardless of dose level.
+
+  CLAIM SEQUENCING: Submit the J8999-VEN drug claim before facility fees to ensure the card
+  absorbs the deductible. Venetoclax is typically dispensed as an oral medication, so facility
+  claim sequencing is less critical than for IV drugs — but the principle remains the same
+  when both claim types appear on the same encounter.
+
+  ANNUAL MAX EXHAUSTION: At $15,000 annual maximum, benefit exhaustion timing depends on
+  insurance cost-sharing. A patient with 20% coinsurance on a $2,000/month drug cost reaches
+  exhaustion after approximately 37 months of coverage (or sooner if deductible is high).
+  The card resets on January 1.
+
+  WHAT THIS CARD DOES NOT COVER: Facility fees, hospitalization for tumor lysis monitoring,
+  lab tests (potassium, phosphorus, uric acid monitoring for TLS), and any code other than
+  J8999-VEN.
+
+  MID-YEAR DIAGNOSIS CHANGE: If a CLL patient progresses to Richter's transformation (diffuse
+  large B-cell lymphoma), Venetoclax may continue but the primary billing diagnosis changes.
+  The clinic should contact AbbVie support to confirm continued card eligibility.
+
+  GOVERNMENT PLAN PATIENTS: Medicare, Medicaid, TRICARE ineligible. myAbbVie Assist has a
+  separate free drug program for uninsured and government plan patients.
+
+  CONTACT: myAbbVie Assist 1-800-222-6885 | www.myabbvieassist.com (Mon–Fri 8am–7pm CT)

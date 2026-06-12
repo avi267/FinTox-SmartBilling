@@ -1,0 +1,103 @@
+policy_id: CCAF-SOLID-2024
+file_name: cancer_care_copay_assist.yaml
+program_name: CancerCare Copay Assistance Foundation
+program_type: foundation_grant
+
+eligible_billing_codes: []
+eligible_diagnoses:
+  - breast
+  - lung
+  - nsclc
+  - sclc
+  - colorectal
+  - colon
+  - rectal
+  - ovarian
+  - ovary
+  - fallopian
+  - prostate
+  - pancreatic
+  - pancreas
+  - bladder
+  - kidney
+  - renal cell
+  - melanoma
+  - thyroid
+  - gastric
+  - stomach
+  - esophageal
+  - cervical
+  - endometrial
+  - uterine
+  - hepatocellular
+  - liver
+
+required_biomarkers: []
+
+requires_commercial_insurance: false
+requires_insurance: true
+
+covers_facility_fees: false
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 7500.00
+covers_deductible: true
+
+income_limit_fpl_pct: 500.0
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The CancerCare Copay Assistance Foundation provides up to $7,500 per year toward drug-related
+  out-of-pocket costs for patients with solid tumor cancers. This program complements LLS
+  (which covers blood cancers) by focusing specifically on carcinomas and solid malignancies.
+  Facility fees are not covered.
+
+  ELIGIBLE DIAGNOSES — SOLID TUMORS ONLY: Breast, lung (NSCLC and SCLC), colorectal, ovarian,
+  prostate, pancreatic, bladder, kidney (renal cell carcinoma), melanoma, thyroid, gastric,
+  esophageal, cervical, endometrial, uterine, and hepatocellular carcinoma. Hematologic
+  malignancies (leukemia, lymphoma, myeloma) are not covered — refer those patients to LLS.
+
+  INCOME ELIGIBILITY: Household income must be at or below 500% of the Federal Poverty Level
+  (FPL), adjusted for family size. In 2024, this is approximately $75,300 for a single person,
+  $102,200 for a household of two, and $129,100 for a household of three. This is a more
+  generous income threshold than PAN Foundation or HealthWell (both 400% FPL), making
+  CancerCare accessible to more patients.
+
+  DRUG COSTS ONLY: This grant covers drug deductible and coinsurance costs. Facility fees,
+  nursing fees, and administrative charges are excluded. For facility fee assistance, stack
+  with PAN Foundation (breast cancer) or Patient Advocate Foundation (any cancer).
+
+  ACCEPTS GOVERNMENT PLANS: Medicare, Medicaid, TRICARE, and other government insurance
+  patients are eligible. The patient must have active insurance.
+
+  ENROLLMENT: Apply at www.cancercare.org/copaygrants or call 1-800-813-4673 (HOPE).
+  Applications are reviewed by a financial counselor within 3–5 business days.
+
+  REQUIRED DOCUMENTATION: Active insurance card (commercial or government), oncologist
+  letter confirming solid tumor diagnosis and active treatment, income documentation (most
+  recent tax return or pay stubs), and completed CancerCare application.
+
+  CLAIM SEQUENCING: Submit the drug claim before facility fees to maximize the grant's
+  coverage of the drug deductible. If a manufacturer card is also applicable, use the
+  manufacturer card first (it covers more per claim); CancerCare can cover any remaining
+  drug cost not covered by the manufacturer program.
+
+  ANNUAL BENEFIT: The $7,500 annual benefit resets on January 1. At $600/month in drug
+  OOP (deductible + coinsurance), the grant covers approximately 12.5 months. Patients
+  approaching exhaustion should be proactively flagged for re-application in the new year.
+
+  FUND AVAILABILITY: CancerCare maintains disease-specific grant funds that may open and
+  close throughout the year. Check www.cancercare.org for current availability before applying.
+  Early-year applications (January–March) are most likely to secure funding.
+
+  STACKING STRATEGY: CancerCare works well as a secondary layer. Manufacturer copay card
+  covers drug OOP first (often to $0 for covered codes). CancerCare covers drug OOP for
+  uncovered codes or when the manufacturer card is exhausted. Patient Advocate Foundation
+  covers coinsurance on facility fees if the patient has met their deductible.
+
+  COUNSELING SERVICES: CancerCare also provides free professional counseling, support groups,
+  and navigation services to cancer patients regardless of grant eligibility. These services
+  are available even if the copay grant funds are closed.
+
+  CONTACT: CancerCare 1-800-813-4673 | www.cancercare.org/copaygrants (Mon–Thu 9am–7pm ET)

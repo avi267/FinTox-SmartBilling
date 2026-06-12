@@ -1,0 +1,65 @@
+policy_id: PFZ-OT-2024
+file_name: pfizer_oncology_together.yaml
+program_name: Pfizer Oncology Together Copay Card
+program_type: manufacturer_card
+
+eligible_billing_codes: [J8999]
+eligible_diagnoses:
+  - breast
+required_biomarkers: []
+
+requires_commercial_insurance: true
+requires_insurance: true
+
+covers_facility_fees: false
+coverage_pct: 1.0
+monthly_max: 500.00
+annual_max: 6000.00
+covers_deductible: true
+
+income_limit_fpl_pct: null
+income_limit_absolute: 150000.00
+requires_active_treatment: true
+
+description: |
+  The Pfizer Oncology Together Copay Card covers patient out-of-pocket costs for
+  Palbociclib (Ibrance) billed under code J8999, up to $500 per 28-day treatment cycle
+  and $6,000 per calendar year. The monthly cap means per-cycle patient savings are
+  limited to $500 regardless of coinsurance amount — patients with high coinsurance may
+  still owe a balance above the monthly cap.
+
+  INCOME ELIGIBILITY: Household income must be at or below $150,000 annually. This is a
+  flat dollar ceiling, not adjusted for family size. Patients must self-attest income at
+  enrollment; Pfizer may request documentation if income seems inconsistent with claim data.
+
+  ENROLLMENT: Enroll at www.pfizeroncologytogether.com or call 1-844-989-PATH (7284).
+  Enrollment is valid for the calendar year and must be renewed annually.
+
+  REQUIRED DOCUMENTATION: Commercial insurance card, J8999 prescription, signed enrollment
+  attestation including income certification. No tax returns required at enrollment.
+
+  MONTHLY CAP MECHANICS: The $500/month cap is applied per 28-day cycle, not per calendar
+  month. If a patient's out-of-pocket for a cycle is $800 (deductible + coinsurance), the
+  card covers $500 and the patient owes $300. In months where two cycles fall (e.g., a 21-day
+  cycle schedule), the cap applies per cycle, not combined.
+
+  ANNUAL MAX EXHAUSTION: At $500/month maximum, the $6,000 annual benefit exhausts after
+  12 cycles. Patients on 28-day cycles will typically use the full benefit over the year.
+  After exhaustion, the patient pays full out-of-pocket for the remainder of the year.
+  Benefits reset on January 1.
+
+  CLAIM SEQUENCING: Submit the J8999 drug claim before facility or administrative fees
+  to ensure this card absorbs the deductible portion first. The monthly cap still applies
+  regardless of sequencing, but drug-first sequencing minimizes patient deductible exposure.
+
+  WHAT THIS CARD DOES NOT COVER: Facility fees, administration fees, IV infusion fees,
+  and any billing code other than J8999.
+
+  MID-YEAR INCOME CHANGE: If household income exceeds $150,000 during the year (e.g.,
+  spouse employment change), the patient must notify Pfizer. Failure to report may result
+  in repayment of benefits.
+
+  GOVERNMENT PLAN PATIENTS: Medicare, Medicaid, TRICARE, and all government plans are
+  ineligible. Foundation grants should be explored for these patients.
+
+  CONTACT: Pfizer Oncology Together 1-844-989-7284 | www.pfizeroncologytogether.com

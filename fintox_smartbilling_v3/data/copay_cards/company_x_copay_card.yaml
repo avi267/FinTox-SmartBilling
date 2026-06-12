@@ -1,0 +1,74 @@
+policy_id: CX-COPAY-2024
+file_name: company_x_copay_card.yaml
+program_name: Company X Copay Assistance Card
+program_type: manufacturer_card
+
+eligible_billing_codes: [J9331]
+eligible_diagnoses:
+  - breast
+  - gastric
+  - gastroesophageal
+  - her2
+  - stomach
+required_biomarkers: []
+
+requires_commercial_insurance: true
+requires_insurance: true
+
+covers_facility_fees: false
+coverage_pct: 1.0
+monthly_max: null
+annual_max: 25000.00
+covers_deductible: true
+
+income_limit_fpl_pct: null
+income_limit_absolute: null
+requires_active_treatment: true
+
+description: |
+  The Company X Copay Assistance Card is a manufacturer-sponsored program that covers
+  100% of the patient's out-of-pocket cost for Trastuzumab (Herceptin) infusions billed
+  under code J9331, including the deductible portion and coinsurance, up to $25,000 per
+  calendar year. There is no monthly cap — the full annual benefit is available across
+  any number of infusion cycles within the benefit year.
+
+  ENROLLMENT: Patients or clinic staff enroll online at www.companyxcopaycard.com or by
+  calling 1-800-XXX-XXXX. Once enrolled, the billing department receives a BIN, PCN, and
+  Group number. These are entered at claim adjudication exactly like a secondary insurance
+  card. No prior authorization from the manufacturer is required.
+
+  REQUIRED DOCUMENTATION: Proof of commercial insurance (insurance card or EOB), a valid
+  prescription for J9331 from a licensed oncologist, and a signed patient enrollment form.
+  Income verification is not required for this card.
+
+  CLAIM SEQUENCING — CRITICAL: The order in which claims are submitted to insurance
+  determines who absorbs the patient's remaining deductible. If the J9331 drug claim is
+  submitted before any facility or administrative fee, this card absorbs the full deductible
+  and coinsurance, reducing the patient's drug cost to $0. If a facility or admin fee is
+  submitted first, it consumes the deductible — and this card cannot recover those funds.
+  Billing staff should always submit the J9331 claim first.
+
+  WHAT THIS CARD DOES NOT COVER: Facility fees, clinic administrative fees, infusion
+  nursing or chair-time fees, and any drug or procedure billed under a code other than
+  J9331 are strictly excluded. This card applies only to the drug line item.
+
+  ANNUAL MAX EXHAUSTION: Once the $25,000 annual benefit is reached (approximately 10
+  infusion cycles at $2,500/visit for a patient with $500 deductible and 20% coinsurance),
+  the card provides no further coverage for the rest of the calendar year. The patient is
+  responsible for full out-of-pocket costs after exhaustion. Benefits reset on January 1.
+  The clinic can check remaining balance by calling the support line.
+
+  MID-YEAR INSURANCE CHANGES: If a patient transitions from commercial insurance to
+  Medicare or Medicaid mid-year, they become immediately ineligible for this card under
+  federal anti-kickback statute. The clinic should notify the manufacturer program and
+  explore foundation grant options (PAN Foundation, HealthWell) for the remainder of the year.
+
+  BIOSIMILARS: This card covers only Trastuzumab billed under J9331 (reference biologic).
+  Biosimilar versions of trastuzumab (e.g., Kanjinti, Herzuma, Ogivri) use different
+  billing codes and are not covered by this card. A separate manufacturer card may apply.
+
+  GOVERNMENT PLAN PATIENTS: Medicare, Medicaid, TRICARE, CHIP, VA, and Indian Health
+  Service patients are categorically ineligible. Federal law prohibits manufacturer copay
+  subsidies for government plan beneficiaries to prevent TrOOP manipulation.
+
+  CONTACT: copaysupport@companyx.com | 1-800-XXX-XXXX (Mon–Fri 8am–8pm ET)
