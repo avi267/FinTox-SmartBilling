@@ -36,6 +36,7 @@ class OrchestratorResponse:
     all_card_rankings: list[dict]
     all_grant_rankings: list[dict]
     source_documents: list[dict] = field(default_factory=list)
+    ineligible_documents: list[dict] = field(default_factory=list)
     error: Optional[str] = None
 
 
@@ -152,8 +153,8 @@ def _format_simulation_block(result: ComparativeBillingResult) -> str:
     return "\n".join(lines)
 
 
-def _format_policy_block(source_docs: list) -> str:
-    if not source_docs:
+def _format_policy_block(source_docs: list, ineligible_docs: list | None = None) -> str:
+    if not source_docs and not ineligible_docs:
         return "[POLICY DOCUMENTS]\nNo policy documents retrieved.\n[END POLICY DOCUMENTS]"
 
     lines = ["[POLICY DOCUMENTS — CITE USING [Source: filename] FORMAT]"]
@@ -163,6 +164,22 @@ def _format_policy_block(source_docs: list) -> str:
             doc_dict["excerpt"][:2000],
             f"--- End of {doc_dict['file_name']} ---",
         ]
+
+    if ineligible_docs:
+        lines += [
+            "",
+            "[INELIGIBLE PROGRAMS — for explaining why these programs do not apply]",
+        ]
+        for doc_dict in ineligible_docs:
+            reason = doc_dict.get("ineligibility_reason", "")
+            lines += [
+                f"\n--- Candidate (ineligible): {doc_dict['file_name']} ---",
+                f"DISQUALIFICATION REASON: {reason}" if reason else "",
+                doc_dict["excerpt"][:1500],
+                f"--- End of {doc_dict['file_name']} ---",
+            ]
+        lines.append("[END INELIGIBLE PROGRAMS]")
+
     lines.append("[END POLICY DOCUMENTS]")
     return "\n".join(lines)
 
@@ -194,7 +211,12 @@ class ChatPipelineOrchestrator:
             top_k=3,
         )
 
-    def run(self, patient: dict, user_query: str) -> OrchestratorResponse:
+    def run(
+        self,
+        patient: dict,
+        user_query: str,
+        prior_user_queries: list[str] | None = None,
+    ) -> OrchestratorResponse:
         # Step 1 — Select best stack + run simulation (fully deterministic)
         winning_primary, winning_secondary, simulation_result, card_rankings, grant_rankings = (
             select_best_stack(
@@ -204,12 +226,48 @@ class ChatPipelineOrchestrator:
             )
         )
 
-        # Step 2 — Retrieve policy docs; bias toward both winning policy files
-        enriched_query = (
-            f"{user_query} {winning_primary.file_name} {winning_secondary.file_name} "
-            + " ".join(winning_primary.eligible_billing_codes)
+        no_eligible_program = (
+            winning_primary.policy_id == "NO-POLICY"
+            and winning_secondary.policy_id == "NO-POLICY"
+        )
+
+        # Ext 4 — Augment query with patient clinical profile for better recall
+        diagnosis = patient.get("diagnosis", "")
+        biomarkers = " ".join(patient.get("biomarkers", []))
+        drug_code = next(
+            (c["billing_code"] for c in patient.get("claims", []) if c["type"] == "drug"),
+            "",
+        )
+
+        # Ext 5 — Include prior user messages so multi-turn context stays grounded
+        prior_context = " ".join((prior_user_queries or [])[-2:])
+
+        # Policy-biased query (winning policy filenames + codes + patient profile)
+        policy_query = (
+            f"{winning_primary.file_name} {winning_secondary.file_name} "
+            f"{' '.join(winning_primary.eligible_billing_codes)} "
+            f"{diagnosis} {biomarkers} {drug_code}"
         ).strip()
-        retrieved_docs = self._kb.search(enriched_query)
+
+        # Full user-facing query (current + recent prior turns)
+        full_user_query = f"{prior_context} {user_query}".strip()
+
+        # Step 2 — Retrieve policy docs via merged multi-query search (Ext 3)
+        if no_eligible_program:
+            # Ext 1 — No winner: retrieve by patient profile so LLM can explain why
+            fallback_query = f"{diagnosis} {biomarkers} {drug_code} {user_query}".strip()
+            retrieved_docs = self._kb.search(fallback_query)
+        else:
+            retrieved_docs = self._kb.multi_query_search(policy_query, full_user_query)
+
+        # Guarantee both selected program docs are present regardless of BM25 ranking
+        retrieved_filenames = {doc.metadata.get("source", "") for doc in retrieved_docs}
+        missing_filenames = [
+            f for f in [winning_primary.file_name, winning_secondary.file_name]
+            if f and f not in retrieved_filenames
+        ]
+        if missing_filenames:
+            retrieved_docs = list(retrieved_docs) + self._kb.search_by_filenames(missing_filenames)
 
         source_documents = [
             {
@@ -221,9 +279,36 @@ class ChatPipelineOrchestrator:
             for doc in retrieved_docs
         ]
 
+        # Ext 2 — Retrieve prose for top ineligible programs so LLM can explain disqualifications
+        ineligible_documents: list[dict] = []
+        top_ineligible_filenames = [
+            r["policy"].file_name
+            for r in (card_rankings + grant_rankings)
+            if not r["eligible"] and r["policy"].file_name
+        ][:4]  # at most 4 ineligible programs across both categories
+        if top_ineligible_filenames:
+            ineligible_docs = self._kb.search_by_filenames(top_ineligible_filenames)
+            ineligible_documents = [
+                {
+                    "file_name": doc.metadata.get("source", "unknown"),
+                    "excerpt": doc.page_content,
+                    "exact_code_match": False,
+                    "retrieval_rank": doc.metadata.get("retrieval_rank", 0),
+                    "ineligibility_reason": next(
+                        (
+                            r["ineligibility_reason"]
+                            for r in (card_rankings + grant_rankings)
+                            if r["policy"].file_name == doc.metadata.get("source", "")
+                        ),
+                        "",
+                    ),
+                }
+                for doc in ineligible_docs
+            ]
+
         # Step 3 — Build LLM prompt
         simulation_block = _format_simulation_block(simulation_result)
-        policy_block = _format_policy_block(source_documents)
+        policy_block = _format_policy_block(source_documents, ineligible_documents)
 
         human_message_content = (
             f"[USER QUESTION]\n{user_query}\n\n"
@@ -258,6 +343,7 @@ class ChatPipelineOrchestrator:
                 all_card_rankings=card_rankings,
                 all_grant_rankings=grant_rankings,
                 source_documents=source_documents,
+                ineligible_documents=ineligible_documents,
                 error=str(exc),
             )
 
@@ -271,5 +357,6 @@ class ChatPipelineOrchestrator:
             all_card_rankings=card_rankings,
             all_grant_rankings=grant_rankings,
             source_documents=source_documents,
+            ineligible_documents=ineligible_documents,
             error=None,
         )
