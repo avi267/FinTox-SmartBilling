@@ -185,3 +185,57 @@ class HighPrecisionKnowledgeBase:
             )
 
         return results
+
+    def multi_query_search(self, policy_query: str, user_query: str) -> list[Document]:
+        """
+        Run two BM25 searches — one biased toward winning policies, one toward the
+        user's question — then merge results deduplicated by source filename.
+        Policy-biased results come first; user-query results fill remaining slots.
+        Returns up to self.top_k Documents total.
+        """
+        if not self._documents:
+            return []
+
+        policy_docs = self.search(policy_query)
+        user_docs = self.search(user_query)
+
+        seen_sources: set[str] = set()
+        merged: list[Document] = []
+
+        for doc in policy_docs:
+            src = doc.metadata.get("source", "")
+            if src not in seen_sources:
+                seen_sources.add(src)
+                merged.append(doc)
+
+        for doc in user_docs:
+            src = doc.metadata.get("source", "")
+            if src not in seen_sources and len(merged) < self.top_k:
+                seen_sources.add(src)
+                merged.append(doc)
+
+        # Re-number retrieval ranks after merge
+        for i, doc in enumerate(merged):
+            doc.metadata["retrieval_rank"] = i + 1
+
+        return merged
+
+    def search_by_filenames(self, filenames: list[str]) -> list[Document]:
+        """
+        Return documents whose source filename is in the provided list.
+        Used to retrieve prose for specific (e.g. ineligible) policies by name.
+        """
+        results: list[Document] = []
+        for doc in self._documents:
+            if doc.metadata.get("source", "") in filenames:
+                results.append(
+                    Document(
+                        page_content=doc.page_content,
+                        metadata={
+                            **doc.metadata,
+                            "retrieval_rank": len(results) + 1,
+                            "exact_code_match": False,
+                        },
+                    )
+                )
+        return results

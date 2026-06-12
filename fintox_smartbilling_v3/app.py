@@ -240,7 +240,7 @@ with st.sidebar:
 
 
 # ---------------------------------------------------------------------------
-# Build patient dict from sidebar form values
+# Build patient dict from form values
 # ---------------------------------------------------------------------------
 def _build_patient_from_form() -> dict:
     return {
@@ -307,6 +307,7 @@ def _render_policy_comparison(
                 pd.DataFrame(card_rows),
                 use_container_width=True,
                 hide_index=True,
+                height=min(200, 35 + len(card_rows) * 35),
                 column_config={"Selected as Primary": st.column_config.TextColumn(width="small")},
             )
         else:
@@ -314,14 +315,11 @@ def _render_policy_comparison(
 
         if ineligible_cards:
             st.markdown("**Ineligible cards**")
-            st.dataframe(
+            st.table(
                 pd.DataFrame([{
                     "Program": r["policy"].program_name,
                     "Ineligibility Reason": r["ineligibility_reason"],
-                } for r in ineligible_cards]),
-                use_container_width=True,
-                hide_index=True,
-                column_config={"Ineligibility Reason": st.column_config.TextColumn(width="large")},
+                } for r in ineligible_cards]).set_index("Program")
             )
 
         st.divider()
@@ -348,6 +346,7 @@ def _render_policy_comparison(
                 pd.DataFrame(grant_rows),
                 use_container_width=True,
                 hide_index=True,
+                height=min(200, 35 + len(grant_rows) * 35),
                 column_config={"Selected as Secondary": st.column_config.TextColumn(width="small")},
             )
         else:
@@ -355,14 +354,11 @@ def _render_policy_comparison(
 
         if ineligible_grants:
             st.markdown("**Ineligible grants**")
-            st.dataframe(
+            st.table(
                 pd.DataFrame([{
                     "Program": r["policy"].program_name,
                     "Ineligibility Reason": r["ineligibility_reason"],
-                } for r in ineligible_grants]),
-                use_container_width=True,
-                hide_index=True,
-                column_config={"Ineligibility Reason": st.column_config.TextColumn(width="large")},
+                } for r in ineligible_grants]).set_index("Program")
             )
 
 
@@ -540,30 +536,53 @@ if run_preview:
 
 st.divider()
 
+def _render_audit_trail(
+    source_documents: list,
+    selected_filenames: list[str],
+    key_prefix: str,
+) -> None:
+    """Render the knowledge base audit trail — filtered to selected program docs only."""
+    docs_to_show = [
+        s for s in source_documents
+        if s.get("file_name", "") in selected_filenames
+    ]
+
+    if docs_to_show:
+        st.divider()
+        st.markdown("##### 📚 Knowledge Base Audit Trail")
+        for src in docs_to_show:
+            file_name = src.get("file_name", "unknown")
+            exact_badge = " ✅ Exact Code Match" if src.get("exact_code_match") else ""
+            with st.expander(
+                f"🔍 Audit Trail Verified: {file_name}{exact_badge}",
+                expanded=False,
+            ):
+                meta_lines = f"**Source file:** `{file_name}`  \n**Retrieval rank:** {src.get('retrieval_rank', '—')}"
+                if src.get("exact_code_match"):
+                    meta_lines += "  \n**Exact billing code match:** ✅"
+                st.markdown(meta_lines)
+                st.divider()
+                st.text_area(
+                    "Raw policy text used by the model:",
+                    value=src.get("excerpt", ""),
+                    height=300,
+                    disabled=True,
+                    label_visibility="collapsed",
+                    key=f"{key_prefix}_{file_name}_{src.get('retrieval_rank')}",
+                )
+
+
 # --- Chat history ---
 for msg_idx, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-        if msg["role"] == "assistant" and msg.get("source_documents"):
-            for src in msg["source_documents"]:
-                file_name = src.get("file_name", "unknown")
-                exact_badge = " ✅ Exact Code Match" if src.get("exact_code_match") else ""
-                with st.expander(f"🔍 Audit Trail Verified: {file_name}{exact_badge}"):
-                    st.markdown(
-                        f"**Source file:** `{file_name}`  \n"
-                        f"**Retrieval rank:** {src.get('retrieval_rank', '—')}  \n"
-                        f"**Exact billing code match:** {src.get('exact_code_match', False)}"
-                    )
-                    st.divider()
-                    st.text_area(
-                        "Raw policy text used by the model:",
-                        value=src.get("excerpt", ""),
-                        height=250,
-                        disabled=True,
-                        label_visibility="collapsed",
-                        key=f"hist_{msg_idx}_{file_name}_{src.get('retrieval_rank')}",
-                    )
+        if msg["role"] == "assistant":
+            _render_audit_trail(
+                source_documents=msg.get("source_documents", []),
+                selected_filenames=msg.get("selected_filenames", []),
+                key_prefix=f"hist_{msg_idx}",
+            )
 
 # --- Chat input ---
 user_input = st.chat_input(
@@ -581,11 +600,25 @@ if user_input:
 
     patient_data = _build_patient_from_form()
 
+    # Ext 5 — Collect prior user turns for multi-turn retrieval context
+    prior_user_queries = [
+        m["content"]
+        for m in st.session_state.messages
+        if m["role"] == "user"
+    ]
+
+    # First user message in this session gets the full audit trail
+    is_first_query = len(prior_user_queries) == 1
+
     with st.chat_message("assistant"):
         with st.spinner("Selecting best policy stack + running simulation + AI narrative…"):
             try:
                 orchestrator = _get_orchestrator(os.environ.get("GOOGLE_API_KEY", ""))
-                response = orchestrator.run(patient=patient_data, user_query=user_input)
+                response = orchestrator.run(
+                    patient=patient_data,
+                    user_query=user_input,
+                    prior_user_queries=prior_user_queries,
+                )
             except Exception as exc:
                 st.error(f"Pipeline error: {exc}")
                 st.stop()
@@ -595,33 +628,26 @@ if user_input:
         if response.error:
             st.warning(f"Note: LLM call encountered an error — {response.error}")
 
-        if response.source_documents:
-            st.divider()
-            st.markdown("##### 📚 Knowledge Base Audit Trail")
-            for src in response.source_documents:
-                file_name = src.get("file_name", "unknown")
-                exact_badge = " ✅ Exact Code Match" if src.get("exact_code_match") else ""
-                with st.expander(
-                    f"🔍 Audit Trail Verified: {file_name}{exact_badge}",
-                    expanded=src.get("exact_code_match", False),
-                ):
-                    st.markdown(
-                        f"**Source file:** `{file_name}`  \n"
-                        f"**Retrieval rank:** {src.get('retrieval_rank', '—')}  \n"
-                        f"**Exact billing code match:** {src.get('exact_code_match', False)}"
-                    )
-                    st.divider()
-                    st.text_area(
-                        "Raw policy text used by the model:",
-                        value=src.get("excerpt", ""),
-                        height=300,
-                        disabled=True,
-                        label_visibility="collapsed",
-                        key=f"audit_{file_name}_{src.get('retrieval_rank')}",
-                    )
+        # Selected program filenames — used for follow-up audit trail filtering
+        selected_filenames = [
+            f for f in [
+                response.primary_policy.file_name,
+                response.secondary_policy.file_name,
+            ] if f
+        ]
+
+        msg_key = len(st.session_state.messages)
+        _render_audit_trail(
+            source_documents=response.source_documents,
+            selected_filenames=selected_filenames,
+            key_prefix=f"audit_{msg_key}",
+        )
 
     st.session_state.messages.append({
         "role": "assistant",
         "content": response.llm_narrative,
         "source_documents": response.source_documents,
+        "ineligible_documents": response.ineligible_documents,
+        "is_first_query": is_first_query,
+        "selected_filenames": selected_filenames,
     })
