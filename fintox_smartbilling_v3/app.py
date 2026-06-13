@@ -128,14 +128,22 @@ with st.sidebar:
         help="Used for diagnosis-based eligibility filtering. Must match the patient's documented oncology diagnosis.",
     )
 
-    insurance_type_field = st.selectbox(
-        "Insurance Type",
-        options=["commercial", "medicare", "medicaid", "tricare", "chip", "va", "uninsured"],
-        index=["commercial", "medicare", "medicaid", "tricare", "chip", "va", "uninsured"].index(
-            _seed_val(["insurance_type"], "commercial")
-        ),
-        help="Manufacturer copay cards require commercial insurance. Government plans disqualify from manufacturer programs.",
-    )
+    _insurance_options = ["commercial", "medicare", "medicaid", "tricare", "chip", "va", "uninsured"]
+    if seed is None:
+        _ins_raw = st.selectbox(
+            "Insurance Type",
+            options=["— select —"] + _insurance_options,
+            index=0,
+            help="Manufacturer copay cards require commercial insurance. Government plans disqualify from manufacturer programs.",
+        )
+        insurance_type_field = _ins_raw if _ins_raw != "— select —" else "commercial"
+    else:
+        insurance_type_field = st.selectbox(
+            "Insurance Type",
+            options=_insurance_options,
+            index=_insurance_options.index(_seed_val(["insurance_type"], "commercial")),
+            help="Manufacturer copay cards require commercial insurance. Government plans disqualify from manufacturer programs.",
+        )
 
     annual_income_field = st.number_input(
         "Annual Household Income ($)",
@@ -156,14 +164,22 @@ with st.sidebar:
         help="FPL ceilings are adjusted by family size. E.g. 400% FPL: $60,240 (size 1) vs $124,800 (size 4).",
     )
 
-    treatment_status_field = st.selectbox(
-        "Treatment Status",
-        options=["active", "initiating", "completed", "surveillance"],
-        index=["active", "initiating", "completed", "surveillance"].index(
-            _seed_val(["treatment_status"], "active")
-        ),
-        help="Most programs require active or initiating treatment.",
-    )
+    _treatment_options = ["active", "initiating", "completed", "surveillance"]
+    if seed is None:
+        _tx_raw = st.selectbox(
+            "Treatment Status",
+            options=["— select —"] + _treatment_options,
+            index=0,
+            help="Most programs require active or initiating treatment.",
+        )
+        treatment_status_field = _tx_raw if _tx_raw != "— select —" else "active"
+    else:
+        treatment_status_field = st.selectbox(
+            "Treatment Status",
+            options=_treatment_options,
+            index=_treatment_options.index(_seed_val(["treatment_status"], "active")),
+            help="Most programs require active or initiating treatment.",
+        )
 
     biomarkers_field = st.text_input(
         "Biomarkers (comma-separated)",
@@ -321,7 +337,9 @@ def _render_policy_comparison(
                 } for r in ineligible_cards]),
                 use_container_width=True,
                 hide_index=True,
-                height=min(250, 35 + len(ineligible_cards) * 35),
+                column_config={
+                    "Ineligibility Reason": st.column_config.TextColumn(width="large"),
+                },
             )
 
         st.divider()
@@ -363,7 +381,9 @@ def _render_policy_comparison(
                 } for r in ineligible_grants]),
                 use_container_width=True,
                 hide_index=True,
-                height=min(250, 35 + len(ineligible_grants) * 35),
+                column_config={
+                    "Ineligibility Reason": st.column_config.TextColumn(width="large"),
+                },
             )
 
 
