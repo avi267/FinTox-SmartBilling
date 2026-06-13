@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Optional
 
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 from .risk_gate import select_best_stack, ComparativeBillingResult
 from .policy_registry import PolicyConfig
@@ -66,7 +66,11 @@ reference a figure only when it directly answers the question.
 # Formatting helpers
 # ---------------------------------------------------------------------------
 
-def _format_simulation_block(result: ComparativeBillingResult) -> str:
+def _format_simulation_block(
+    result: ComparativeBillingResult,
+    card_rankings: list[dict] | None = None,
+    grant_rankings: list[dict] | None = None,
+) -> str:
     primary = result.primary_policy
     secondary = result.secondary_policy
 
@@ -147,38 +151,70 @@ def _format_simulation_block(result: ComparativeBillingResult) -> str:
         f"NET PATIENT SAVINGS (Smart vs Traditional): ${result.net_savings_smart_vs_traditional:>10,.2f}",
         f"FOUNDATION GRANT PRESERVED (Smart vs Traditional): ${result.foundation_grant_preserved:>10,.2f}",
         "  (Smart billing uses less of the foundation's annual grant, preserving it for future visits.)",
-        "[END SIMULATION DATA]",
     ]
 
+    # All programs with eligibility status — LLM uses this to answer any eligibility question
+    all_rankings = list(card_rankings or []) + list(grant_rankings or [])
+    lines += ["", "=== ALL PROGRAMS — ELIGIBILITY SUMMARY ==="]
+    for r in all_rankings:
+        p = r["policy"]
+        if r["eligible"]:
+            if p.policy_id == primary.policy_id:
+                tag = "[ELIGIBLE — PRIMARY]  "
+            elif p.policy_id == secondary.policy_id:
+                tag = "[ELIGIBLE — SECONDARY]"
+            else:
+                tag = "[ELIGIBLE — OTHER]    "
+            lines.append(
+                f"  {tag} {p.program_name} | Annual Max: ${p.annual_max:,.0f} | "
+                f"Covers Deductible: {'Yes' if p.covers_deductible else 'No'} | "
+                f"Covers Facility: {'Yes' if p.covers_facility_fees else 'No'}"
+            )
+        else:
+            reason = r.get("ineligibility_reason", "reason not specified")
+            lines.append(f"  [INELIGIBLE]           {p.program_name} — {reason}")
+
+    lines.append("[END SIMULATION DATA]")
     return "\n".join(lines)
 
 
-def _format_policy_block(source_docs: list, ineligible_docs: list | None = None) -> str:
-    if not source_docs and not ineligible_docs:
+def _format_policy_block(
+    source_docs: list,
+    all_rankings: list[dict] | None = None,
+    primary_id: str = "",
+    secondary_id: str = "",
+) -> str:
+    if not source_docs:
         return "[POLICY DOCUMENTS]\nNo policy documents retrieved.\n[END POLICY DOCUMENTS]"
+
+    # Build eligibility lookup keyed by file_name
+    eligibility: dict[str, tuple[bool, str]] = {}
+    for r in (all_rankings or []):
+        fname = r["policy"].file_name
+        eligible = r["eligible"]
+        reason = r.get("ineligibility_reason", "")
+        pid = r["policy"].policy_id
+        if eligible:
+            if pid == primary_id:
+                label = "ELIGIBLE — Selected as Primary Copay Card"
+            elif pid == secondary_id:
+                label = "ELIGIBLE — Selected as Secondary Foundation Grant"
+            else:
+                label = "ELIGIBLE — Not selected (alternative program)"
+        else:
+            label = f"INELIGIBLE — {reason}" if reason else "INELIGIBLE"
+        eligibility[fname] = (eligible, label)
 
     lines = ["[POLICY DOCUMENTS — CITE USING [Source: filename] FORMAT]"]
     for doc_dict in source_docs:
+        fname = doc_dict["file_name"]
+        _, status_label = eligibility.get(fname, (True, "ELIGIBILITY UNKNOWN"))
         lines += [
-            f"\n--- Source: {doc_dict['file_name']} ---",
+            f"\n--- Source: {fname} ---",
+            f"ELIGIBILITY: {status_label}",
             doc_dict["excerpt"][:2000],
-            f"--- End of {doc_dict['file_name']} ---",
+            f"--- End of {fname} ---",
         ]
-
-    if ineligible_docs:
-        lines += [
-            "",
-            "[INELIGIBLE PROGRAMS — for explaining why these programs do not apply]",
-        ]
-        for doc_dict in ineligible_docs:
-            reason = doc_dict.get("ineligibility_reason", "")
-            lines += [
-                f"\n--- Candidate (ineligible): {doc_dict['file_name']} ---",
-                f"DISQUALIFICATION REASON: {reason}" if reason else "",
-                doc_dict["excerpt"][:1500],
-                f"--- End of {doc_dict['file_name']} ---",
-            ]
-        lines.append("[END INELIGIBLE PROGRAMS]")
 
     lines.append("[END POLICY DOCUMENTS]")
     return "\n".join(lines)
@@ -215,7 +251,7 @@ class ChatPipelineOrchestrator:
         self,
         patient: dict,
         user_query: str,
-        prior_user_queries: list[str] | None = None,
+        prior_messages: list[dict] | None = None,
     ) -> OrchestratorResponse:
         # Step 1 — Select best stack + run simulation (fully deterministic)
         winning_primary, winning_secondary, simulation_result, card_rankings, grant_rankings = (
@@ -231,7 +267,6 @@ class ChatPipelineOrchestrator:
             and winning_secondary.policy_id == "NO-POLICY"
         )
 
-        # Ext 4 — Augment query with patient clinical profile for better recall
         diagnosis = patient.get("diagnosis", "")
         biomarkers = " ".join(patient.get("biomarkers", []))
         drug_code = next(
@@ -239,35 +274,24 @@ class ChatPipelineOrchestrator:
             "",
         )
 
-        # Ext 5 — Include prior user messages so multi-turn context stays grounded
-        prior_context = " ".join((prior_user_queries or [])[-2:])
-
-        # Policy-biased query (winning policy filenames + codes + patient profile)
-        policy_query = (
-            f"{winning_primary.file_name} {winning_secondary.file_name} "
-            f"{' '.join(winning_primary.eligible_billing_codes)} "
-            f"{diagnosis} {biomarkers} {drug_code}"
-        ).strip()
-
-        # Full user-facing query (current + recent prior turns)
-        full_user_query = f"{prior_context} {user_query}".strip()
-
-        # Step 2 — Retrieve policy docs via merged multi-query search (Ext 3)
+        # Step 2 — Targeted doc retrieval
         if no_eligible_program:
-            # Ext 1 — No winner: retrieve by patient profile so LLM can explain why
+            # No winner: retrieve by patient profile so LLM can explain why
             fallback_query = f"{diagnosis} {biomarkers} {drug_code} {user_query}".strip()
             retrieved_docs = self._kb.search(fallback_query)
         else:
-            retrieved_docs = self._kb.multi_query_search(policy_query, full_user_query)
-
-        # Guarantee both selected program docs are present regardless of BM25 ranking
-        retrieved_filenames = {doc.metadata.get("source", "") for doc in retrieved_docs}
-        missing_filenames = [
-            f for f in [winning_primary.file_name, winning_secondary.file_name]
-            if f and f not in retrieved_filenames
-        ]
-        if missing_filenames:
-            retrieved_docs = list(retrieved_docs) + self._kb.search_by_filenames(missing_filenames)
+            # Guaranteed slots: selected programs + second-best eligible card and grant
+            guaranteed_filenames = [
+                f for f in [
+                    winning_primary.file_name,
+                    winning_secondary.file_name,
+                    next((r["policy"].file_name for r in card_rankings
+                          if r["eligible"] and r["policy"].policy_id != winning_primary.policy_id), None),
+                    next((r["policy"].file_name for r in grant_rankings
+                          if r["eligible"] and r["policy"].policy_id != winning_secondary.policy_id), None),
+                ] if f
+            ]
+            retrieved_docs = self._kb.search_by_filenames(guaranteed_filenames)
 
         source_documents = [
             {
@@ -279,36 +303,15 @@ class ChatPipelineOrchestrator:
             for doc in retrieved_docs
         ]
 
-        # Ext 2 — Retrieve prose for top ineligible programs so LLM can explain disqualifications
-        ineligible_documents: list[dict] = []
-        top_ineligible_filenames = [
-            r["policy"].file_name
-            for r in (card_rankings + grant_rankings)
-            if not r["eligible"] and r["policy"].file_name
-        ][:4]  # at most 4 ineligible programs across both categories
-        if top_ineligible_filenames:
-            ineligible_docs = self._kb.search_by_filenames(top_ineligible_filenames)
-            ineligible_documents = [
-                {
-                    "file_name": doc.metadata.get("source", "unknown"),
-                    "excerpt": doc.page_content,
-                    "exact_code_match": False,
-                    "retrieval_rank": doc.metadata.get("retrieval_rank", 0),
-                    "ineligibility_reason": next(
-                        (
-                            r["ineligibility_reason"]
-                            for r in (card_rankings + grant_rankings)
-                            if r["policy"].file_name == doc.metadata.get("source", "")
-                        ),
-                        "",
-                    ),
-                }
-                for doc in ineligible_docs
-            ]
-
         # Step 3 — Build LLM prompt
-        simulation_block = _format_simulation_block(simulation_result)
-        policy_block = _format_policy_block(source_documents, ineligible_documents)
+        all_rankings = card_rankings + grant_rankings
+        simulation_block = _format_simulation_block(simulation_result, card_rankings, grant_rankings)
+        policy_block = _format_policy_block(
+            source_documents,
+            all_rankings=all_rankings,
+            primary_id=winning_primary.policy_id,
+            secondary_id=winning_secondary.policy_id,
+        )
 
         human_message_content = (
             f"[USER QUESTION]\n{user_query}\n\n"
@@ -319,10 +322,14 @@ class ChatPipelineOrchestrator:
             "No external knowledge. No intro or closing sentence. Max 6 bullets."
         )
 
-        messages = [
-            SystemMessage(content=_SYSTEM_PROMPT),
-            HumanMessage(content=human_message_content),
-        ]
+        # Full conversation history injected — no turn limit
+        messages: list = [SystemMessage(content=_SYSTEM_PROMPT)]
+        for m in (prior_messages or []):
+            if m["role"] == "user":
+                messages.append(HumanMessage(content=m["content"]))
+            elif m["role"] == "assistant":
+                messages.append(AIMessage(content=m["content"]))
+        messages.append(HumanMessage(content=human_message_content))
 
         # Step 4 — Call LLM for narrative
         try:
@@ -343,7 +350,7 @@ class ChatPipelineOrchestrator:
                 all_card_rankings=card_rankings,
                 all_grant_rankings=grant_rankings,
                 source_documents=source_documents,
-                ineligible_documents=ineligible_documents,
+                ineligible_documents=[],
                 error=str(exc),
             )
 
@@ -357,6 +364,6 @@ class ChatPipelineOrchestrator:
             all_card_rankings=card_rankings,
             all_grant_rankings=grant_rankings,
             source_documents=source_documents,
-            ineligible_documents=ineligible_documents,
+            ineligible_documents=[],
             error=None,
         )
