@@ -124,28 +124,28 @@
       "id": "PT-005",
       "name": "Marcus",
       "diagnosis": "Chronic Lymphocytic Leukemia (CLL) — Relapsed/Refractory",
-      "annual_household_income": 38000.00,
-      "family_size": 3,
+      "annual_household_income": 88000.00,
+      "family_size": 1,
       "insurance_type": "commercial",
       "biomarkers": ["del17p"],
       "treatment_status": "active",
       "insurance": {
-        "remaining_deductible": 800.00,
-        "coinsurance_rate": 0.20
+        "remaining_deductible": 2500.00,
+        "coinsurance_rate": 0.30
       },
       "claims": [
         {
           "type": "drug",
           "description": "Venetoclax (Venclexta) Tablets",
           "billing_code": "J8999-VEN",
-          "retail_cost": 6500.00,
+          "retail_cost": 9000.00,
           "assistance_program": null
         },
         {
           "type": "facility_fee",
           "description": "Clinic Administrative & Lab Fee",
           "billing_code": "ADMIN-FEE",
-          "retail_cost": 900.00,
+          "retail_cost": 3000.00,
           "assistance_program": null
         }
       ]

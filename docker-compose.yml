@@ -1,0 +1,9 @@
+services:
+  smartbilling:
+    build: .
+    ports:
+      - "8501:8501"
+    env_file:
+      - fintox_smartbilling_v3/.env
+    volumes:
+      - ./fintox_smartbilling_v3/data:/app/fintox_smartbilling_v3/data:ro
