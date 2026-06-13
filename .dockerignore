@@ -1,0 +1,9 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+fintox_smartbilling_v3/.env
+.claude/
+.git/
+*.md

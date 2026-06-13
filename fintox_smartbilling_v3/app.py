@@ -235,7 +235,6 @@ with st.sidebar:
     st.caption(
         "Policy selection is automatic — the engine picks the manufacturer card + foundation grant "
         "stack that minimises patient OOP and preserves the most foundation grant. "
-        "All arithmetic is computed by risk_gate.py; the LLM only narrates."
     )
 
 
