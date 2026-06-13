@@ -128,12 +128,11 @@ with st.sidebar:
         help="Used for diagnosis-based eligibility filtering. Must match the patient's documented oncology diagnosis.",
     )
 
+    _insurance_options = ["commercial", "medicare", "medicaid", "tricare", "chip", "va", "uninsured"]
     insurance_type_field = st.selectbox(
         "Insurance Type",
-        options=["commercial", "medicare", "medicaid", "tricare", "chip", "va", "uninsured"],
-        index=["commercial", "medicare", "medicaid", "tricare", "chip", "va", "uninsured"].index(
-            _seed_val(["insurance_type"], "commercial")
-        ),
+        options=_insurance_options,
+        index=_insurance_options.index(_seed_val(["insurance_type"], "commercial")),
         help="Manufacturer copay cards require commercial insurance. Government plans disqualify from manufacturer programs.",
     )
 
@@ -156,12 +155,11 @@ with st.sidebar:
         help="FPL ceilings are adjusted by family size. E.g. 400% FPL: $60,240 (size 1) vs $124,800 (size 4).",
     )
 
+    _treatment_options = ["active", "initiating", "completed", "surveillance"]
     treatment_status_field = st.selectbox(
         "Treatment Status",
-        options=["active", "initiating", "completed", "surveillance"],
-        index=["active", "initiating", "completed", "surveillance"].index(
-            _seed_val(["treatment_status"], "active")
-        ),
+        options=_treatment_options,
+        index=_treatment_options.index(_seed_val(["treatment_status"], "active")),
         help="Most programs require active or initiating treatment.",
     )
 
@@ -284,11 +282,10 @@ def _render_policy_comparison(
 ) -> None:
     import pandas as pd
 
-    with st.expander("🏆 All Assistance Programs — Policy Comparison Table", expanded=True):
+    with st.expander("🏆 All Assistance Programs — Policy Comparison Table", expanded=False):
         # --- Copay Cards ---
         st.markdown("#### 💊 Manufacturer Copay Cards")
         eligible_cards = [r for r in card_rankings if r["eligible"]]
-        ineligible_cards = [r for r in card_rankings if not r["eligible"]]
 
         if eligible_cards:
             st.markdown("**Eligible cards** — sorted by eligibility")
@@ -306,30 +303,17 @@ def _render_policy_comparison(
                 pd.DataFrame(card_rows),
                 use_container_width=True,
                 hide_index=True,
-                height=min(200, 35 + len(card_rows) * 35),
-                column_config={"Selected as Primary": st.column_config.TextColumn(width="small")},
+                height=35 + len(card_rows) * 35,
+                column_config={"Selected as Primary": st.column_config.TextColumn(width="medium")},
             )
         else:
             st.info("No manufacturer copay cards are eligible for this patient (billing code, diagnosis, or insurance type mismatch).")
-
-        if ineligible_cards:
-            st.markdown("**Ineligible cards**")
-            st.dataframe(
-                pd.DataFrame([{
-                    "Program": r["policy"].program_name,
-                    "Ineligibility Reason": r["ineligibility_reason"],
-                } for r in ineligible_cards]),
-                use_container_width=True,
-                hide_index=True,
-                height=min(250, 35 + len(ineligible_cards) * 35),
-            )
 
         st.divider()
 
         # --- Foundation Grants ---
         st.markdown("#### 🏛 Foundation Grants")
         eligible_grants = [r for r in grant_rankings if r["eligible"]]
-        ineligible_grants = [r for r in grant_rankings if not r["eligible"]]
 
         if eligible_grants:
             st.markdown("**Eligible grants** — sorted by eligibility")
@@ -348,23 +332,12 @@ def _render_policy_comparison(
                 pd.DataFrame(grant_rows),
                 use_container_width=True,
                 hide_index=True,
-                height=min(200, 35 + len(grant_rows) * 35),
-                column_config={"Selected as Secondary": st.column_config.TextColumn(width="small")},
+                height=35 + len(grant_rows) * 35,
+                column_config={"Selected as Secondary": st.column_config.TextColumn(width="medium")},
             )
         else:
             st.info("No foundation grants are eligible for this patient.")
 
-        if ineligible_grants:
-            st.markdown("**Ineligible grants**")
-            st.dataframe(
-                pd.DataFrame([{
-                    "Program": r["policy"].program_name,
-                    "Ineligibility Reason": r["ineligibility_reason"],
-                } for r in ineligible_grants]),
-                use_container_width=True,
-                hide_index=True,
-                height=min(250, 35 + len(ineligible_grants) * 35),
-            )
 
 
 # ---------------------------------------------------------------------------
@@ -619,15 +592,9 @@ if user_input:
 
     patient_data = _build_patient_from_form()
 
-    # Ext 5 — Collect prior user turns for multi-turn retrieval context
-    prior_user_queries = [
-        m["content"]
-        for m in st.session_state.messages
-        if m["role"] == "user"
-    ]
-
-    # First user message in this session gets the full audit trail
-    is_first_query = len(prior_user_queries) == 1
+    # Full conversation history up to (but not including) the current user message
+    prior_messages = st.session_state.messages[:-1]
+    is_first_query = len(prior_messages) == 0
 
     with st.chat_message("assistant"):
         with st.spinner("Selecting best policy stack + running simulation + AI narrative…"):
@@ -636,7 +603,7 @@ if user_input:
                 response = orchestrator.run(
                     patient=patient_data,
                     user_query=user_input,
-                    prior_user_queries=prior_user_queries,
+                    prior_messages=prior_messages,
                 )
             except Exception as exc:
                 st.error(f"Pipeline error: {exc}")
@@ -666,7 +633,6 @@ if user_input:
         "role": "assistant",
         "content": response.llm_narrative,
         "source_documents": response.source_documents,
-        "ineligible_documents": response.ineligible_documents,
         "is_first_query": is_first_query,
         "selected_filenames": selected_filenames,
     })

@@ -60,6 +60,9 @@ desktop.ini
 .claude/settings.local.json
 .claude/worktrees/
 .claude/scheduled_tasks.json
+.claude/plans/
+.claude/memory/
+.claude/launch.json
 
 # IDE
 .vscode/
