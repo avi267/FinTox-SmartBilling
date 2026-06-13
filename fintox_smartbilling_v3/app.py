@@ -315,11 +315,14 @@ def _render_policy_comparison(
 
         if ineligible_cards:
             st.markdown("**Ineligible cards**")
-            st.table(
+            st.dataframe(
                 pd.DataFrame([{
                     "Program": r["policy"].program_name,
                     "Ineligibility Reason": r["ineligibility_reason"],
-                } for r in ineligible_cards]).set_index("Program")
+                } for r in ineligible_cards]),
+                use_container_width=True,
+                hide_index=True,
+                height=min(250, 35 + len(ineligible_cards) * 35),
             )
 
         st.divider()
@@ -354,11 +357,14 @@ def _render_policy_comparison(
 
         if ineligible_grants:
             st.markdown("**Ineligible grants**")
-            st.table(
+            st.dataframe(
                 pd.DataFrame([{
                     "Program": r["policy"].program_name,
                     "Ineligibility Reason": r["ineligibility_reason"],
-                } for r in ineligible_grants]).set_index("Program")
+                } for r in ineligible_grants]),
+                use_container_width=True,
+                hide_index=True,
+                height=min(250, 35 + len(ineligible_grants) * 35),
             )
 
 
@@ -468,14 +474,21 @@ def _render_simulation_summary(
                 c2.metric("Deductible Applied", f"${claim.deductible_applied:,.2f}")
                 c3.metric("Coinsurance", f"${claim.coinsurance_applied:,.2f}")
                 c4.metric("Patient OOP", f"${claim.patient_oop:,.2f}")
-                ca, cb = st.columns(2)
+                ca, cb, cc = st.columns(3)
                 ca.caption(f"💊 Copay Card Covers: **${claim.copay_card_covers:,.2f}**")
                 cb.caption(f"🏛 Foundation Covers: **${claim.foundation_covers:,.2f}**")
+                insurance_a = round(claim.retail_cost - claim.deductible_applied - claim.coinsurance_applied, 2)
+                cc.caption(f"🏥 Insurance Covers: **${insurance_a:,.2f}**")
                 st.divider()
+            total_insurance_a = sum(
+                round(c.retail_cost - c.deductible_applied - c.coinsurance_applied, 2)
+                for c in result.path_a_traditional.claim_sequence
+            )
             st.success(
                 f"Total Patient OOP: **${result.path_a_traditional.total_patient_oop:,.2f}**  |  "
                 f"Card Absorbs: **${result.path_a_traditional.total_copay_card_absorbs:,.2f}**  |  "
-                f"Foundation Absorbs: **${result.path_a_traditional.total_foundation_absorbs:,.2f}**"
+                f"Foundation Absorbs: **${result.path_a_traditional.total_foundation_absorbs:,.2f}**  |  "
+                f"Insurance Covers: **${total_insurance_a:,.2f}**"
             )
 
         with tab_b:
@@ -488,14 +501,21 @@ def _render_simulation_summary(
                 c2.metric("Deductible Applied", f"${claim.deductible_applied:,.2f}")
                 c3.metric("Coinsurance", f"${claim.coinsurance_applied:,.2f}")
                 c4.metric("Patient OOP", f"${claim.patient_oop:,.2f}")
-                ca, cb = st.columns(2)
+                ca, cb, cc = st.columns(3)
                 ca.caption(f"💊 Copay Card Covers: **${claim.copay_card_covers:,.2f}**")
                 cb.caption(f"🏛 Foundation Covers: **${claim.foundation_covers:,.2f}**")
+                insurance_b = round(claim.retail_cost - claim.deductible_applied - claim.coinsurance_applied, 2)
+                cc.caption(f"🏥 Insurance Covers: **${insurance_b:,.2f}**")
                 st.divider()
+            total_insurance_b = sum(
+                round(c.retail_cost - c.deductible_applied - c.coinsurance_applied, 2)
+                for c in result.path_b_smart.claim_sequence
+            )
             st.success(
                 f"Total Patient OOP: **${result.path_b_smart.total_patient_oop:,.2f}**  |  "
                 f"Card Absorbs: **${result.path_b_smart.total_copay_card_absorbs:,.2f}**  |  "
-                f"Foundation Absorbs: **${result.path_b_smart.total_foundation_absorbs:,.2f}**"
+                f"Foundation Absorbs: **${result.path_b_smart.total_foundation_absorbs:,.2f}**  |  "
+                f"Insurance Covers: **${total_insurance_b:,.2f}**"
             )
 
 
